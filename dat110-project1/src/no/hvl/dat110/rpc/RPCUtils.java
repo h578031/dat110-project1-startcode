@@ -1,5 +1,7 @@
 package no.hvl.dat110.rpc;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import no.hvl.dat110.TODO;
@@ -16,9 +18,11 @@ public class RPCUtils {
 		byte[] encoded;
 
 		// TODO: marshall RPC identifier and string into byte array
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		encoded = new byte[str.length()+1];
+		encoded[0] = rpcid;
+		byte[] strArr = str.getBytes();
+		for(int i=1; i<encoded.length; i++) {
+			encoded[i] = strArr[i-1];
 		}
 
 		return encoded;
@@ -27,32 +31,27 @@ public class RPCUtils {
 	public static String unmarshallString(byte[] data) {
 
 		String decoded;
-
+		byte[] dec = new byte[data.length-1];
 		// TODO: unmarshall String contained in data into decoded
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		for(int i=0; i<data.length-1; i++) {
+			dec[i] = data[i+1];
 		}
+		decoded = new String(dec);
 
 		return decoded;
 	}
 
 	public static byte[] marshallVoid(byte rpcid) {
 
-		byte[] encoded;
+		byte[] encoded = {rpcid};
 
 		// TODO: marshall RPC identifier in case of void type
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
-
 		return encoded;
 
 	}
 
 	public static void unmarshallVoid(byte[] data) {
-
+		
 		// TODO: unmarshall void type
 	}
 
@@ -79,13 +78,17 @@ public class RPCUtils {
 
 	public static byte[] marshallInteger(byte rpcid, int x) {
 
-		byte[] encoded;
-
+		byte[] encoded = new byte[5];
+		
 		// TODO: marshall RPC identifier and string into byte array
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
+		encoded[0] = rpcid;
+		
+		ByteBuffer buffer = ByteBuffer.allocate(4);
+		byte[] bArr = buffer.putInt(x).array();
+		for(int i=1; i<encoded.length; i++) {
+			encoded[i] = bArr[i-1];
 		}
+		
 
 		return encoded;
 	}
@@ -95,10 +98,8 @@ public class RPCUtils {
 		int decoded;
 
 		// TODO: unmarshall integer contained in data
-
-		if (true) {
-			throw new UnsupportedOperationException(TODO.method());
-		}
+		ByteBuffer buffer = ByteBuffer.wrap(data);
+		decoded = buffer.getInt(1);
 
 		return decoded;
 
